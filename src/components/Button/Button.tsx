@@ -1,5 +1,5 @@
 import React from "react";
-import styles from "./Button.module.scss";
+// import styles from "./Button.module.scss";
 //import classNames from "classnames/bind";
 
 interface ButtonProps
@@ -7,5 +7,5 @@ interface ButtonProps
 
 //let cx = classNames.bind(styles);
 export const Button: React.FC<ButtonProps> = (props) => {
-  return <button className={styles.root}>bbak_button</button>;
+  return <button>bbak_button</button>;
 };
