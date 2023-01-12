@@ -1,11 +1,11 @@
-import babel from "@rollup/plugin-babel";
-import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
-import typescript from "@rollup/plugin-typescript";
+import commonjs from "@rollup/plugin-commonjs";
 import peerDepsExternal from "rollup-plugin-peer-deps-external";
+import babel from "@rollup/plugin-babel";
+import typescript from "@rollup/plugin-typescript";
 import postcss from "rollup-plugin-postcss";
-import postcssPrefixer from "postcss-prefixer";
 import terser from "@rollup/plugin-terser";
+
 const pkg = require("./package.json");
 
 const extensions = [".js", ".jsx", ".ts", ".tsx", ".mjs"];
@@ -22,13 +22,13 @@ const config = [
         preserveModulesRoot: "src",
       },
       {
-        file: "./dist/index.esm.js",
-        format: "esm",
+        file: "./dist/index.es.js",
+        format: "es",
       },
       {
-        name: pkg.name,
         file: "./dist/index.umd.js",
         format: "umd",
+        name: pkg.name,
         globals: {
           react: "React",
           "style-inject": "styleInject",
@@ -37,27 +37,22 @@ const config = [
     ],
     plugins: [
       nodeResolve({ extensions }),
+      commonjs({ include: "node_modules/**" }),
+      peerDepsExternal(),
       babel({
-        extensions,
         exclude: "node_modules/**",
+        extensions,
         include: ["src/**/*"],
         babelHelpers: "bundled",
       }),
-      commonjs({ include: "node_modules/**" }),
-      peerDepsExternal(),
-      typescript({ tsconfig: "./tsconfig.json" }),
+      typescript(),
       postcss({
-        use: ["sass"],
         extract: false,
         modules: true,
         sourceMap: false,
         inject: (cssVariableName) =>
           `import styleInject from 'style-inject';styleInject(${cssVariableName});`,
-        plugins: [
-          postcssPrefixer({
-            prefix: `${pkg.name}__`,
-          }),
-        ],
+        use: ["sass"],
       }),
       terser(),
     ],

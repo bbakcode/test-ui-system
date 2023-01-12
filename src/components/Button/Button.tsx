@@ -7,5 +7,5 @@ interface ButtonProps
 
 //let cx = classNames.bind(styles);
 export const Button: React.FC<ButtonProps> = (props) => {
-  return <button className={styles.root}>bbak_button</button>;
+  return <button className={styles.root}>클릭</button>;
 };
